@@ -1,0 +1,115 @@
+.home-page {
+  width: 600px;
+  margin: 200px auto;
+  font-size: 30px;
+  .bars {
+    font-size: 45px;
+    position: fixed;
+    top: 40px;
+    left: 40px;
+    color: black;
+    cursor: pointer;
+  }
+  .login-form {
+    text-align: center;
+    opacity: .7;
+  }
+  img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -100;
+    // opacity: .8;
+    filter: blur(2px);
+  }
+}
+html, body {
+  width: 100%;
+  height: 100%;
+}
+  .hanwen {
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    color: black;
+    font-weight: 700;
+    opacity: .3;
+    font-size: 30px;
+  }
+.formLogin {
+  display: flex;
+  justify-content: center;
+  .forma {
+    margin-left: 20px;
+    color: black;
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+.ant-table table {
+  width: 100%;
+  text-align: left;
+  border-radius: 4px 4px 0 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+// 重写list组件的样式
+.ant-spin-container {
+  position: relative;
+  transition: opacity 0.3s;
+  -webkit-line-clamp: 3;
+
+  box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.itemMeta {
+  display: block;
+  width: 100%;
+
+}
+// list的item-meta
+.ant-list-item-meta {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  font-size: 0;
+}
+.loadmore-list {
+  min-height: 800px;
+}
+.user-list{
+  display: flex;
+  justify-content: center;
+  overflow: scroll;
+}
+.homemenu {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  justify-content: center;
+  align-items: baseline;
+  font-size: 2em;
+  margin-top: 30px;
+  position: fixed;
+
+  a {
+    color: black;
+    font-weight: 700;
+    margin-left: 50px;
+  }
+  a:hover {
+    font-size: 30px;
+    color: rgb(255,192,203);
+  }
+}
+.showarticle {
+  position: absolute;
+  width: 100%;
+  background: rgba(0, 0, 0, .6);
+  z-index: 100;
+}
