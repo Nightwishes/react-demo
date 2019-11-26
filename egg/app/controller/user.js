@@ -5,6 +5,7 @@ class UserController extends BaseController {
   async signup() {
     const { ctx } = this;
     let user = ctx.request.body;
+    console.log(user);
     if (!user.username || !user.password) {
       this.error('无数据');
       return

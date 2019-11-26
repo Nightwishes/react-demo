@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Icon, Button, message, Row, Col } from 'antd';
 import { signup, signin } from '../../services/user';
-import { drawText, canvasChange } from '../../canvas/drawText';
 import { getAllClassify } from '../../services/classify';
 import { findOneArticleApi } from '../../services/article';
 import marked from 'marked';
@@ -14,6 +13,7 @@ class NormalLoginForm extends React.Component {
       _id: "5cda4ab38f1ee633170e73b3",
       content: ''
     }
+
     componentDidMount () {
       marked.setOptions({
         renderer: new marked.Renderer(),
@@ -26,10 +26,6 @@ class NormalLoginForm extends React.Component {
         smartypants: false
       })
       this.getShouye();
-      let canvas = this.refs.canvas;
-      canvas.width = 500;
-      let context = canvas.getContext('2d');
-      drawText(canvas, context);
       getAllClassify().then(data => {
         let list = data.data;
         list = list.filter(item => {
@@ -39,31 +35,21 @@ class NormalLoginForm extends React.Component {
           classifyList: list
         })
       })
-
-    }
-    handleEnter = () => {
-      if (this.state.formVisity) return;
-      let canvas = this.refs.canvas;
-      canvas.width = 700;
-      canvas.height = 500;
-      let context = canvas.getContext('2d');
-      canvasChange(canvas, context);
-    }
-    handleOut = () => {
-      let canvas = this.refs.canvas;
-      let context = canvas.getContext('2d');
-      canvas.width = 500;
-      canvas.height = 150;
-      drawText(canvas, context);
     }
   handleSubmit = (regin, user) => {
     if (!regin) {
-      message.error('抱歉,已关闭注册接口!');
-      return
-    }
-    (regin ? signin : signup)(user).then(res => {
+      signup(user).then(data => {
+        if (data.code === 0 && !regin) {
+          message.success("注册成功!");
+        } else {
+          message.error('注册失败!');
+        }
+      });  
+    } else {
+      (regin ? signin : signup)(user).then(res => {
       if (res.code === 0 && regin) {
         window.sessionStorage.setItem("userId", res.data)
+        window.sessionStorage.setItem("userMessage", user.username);
         this.props.history.push('/admin');
       } else if (res.code === 0 && !regin) {
         message.success("登录成功!");
@@ -71,6 +57,7 @@ class NormalLoginForm extends React.Component {
         message.error(res.error);
       }
     })
+    }
   }
   // 控制表单是否显示
   show = () => {
@@ -118,7 +105,12 @@ class NormalLoginForm extends React.Component {
           : null
         }
         </Col>
-        <Col span={20}>
+
+        <Col span={20} style={{
+          textAlign: 'center',
+          marginTop: '2%'
+        }}>
+          <h1>markdown博客系统</h1>
         </Col>
           <div className="home-page">
             <Icon type="bars" className="bars" onClick={() => {this.menuShow()}}></Icon>
@@ -127,11 +119,6 @@ class NormalLoginForm extends React.Component {
             className="hanwen"
             >{this.state.formVisity ? '隐藏' : '登录'}</span>
             <div className="login-form">
-              <canvas id="canvas" ref="canvas"
-              onMouseEnter = {() => {this.handleEnter()}}
-              onMouseOut = {() => {this.handleOut()}}
-              >
-              </canvas> 
               {
                 this.state.formVisity ? < WrappedUserForm onSubmit = {
                   this.handleSubmit
@@ -141,9 +128,11 @@ class NormalLoginForm extends React.Component {
           </div>
         </div>
         {
-        this.state.formVisity  ? null :  <div style={shoye} ref="shouyeShow"></div>
+        this.state.formVisity  ? null :  <div style={shoye} ref="shouyeShow">
+        </div> 
         }
-        {/*<img src="http://localhost:7001/static/uploads/helloworld.jpg" alt="背景图" style={{position: 'fixed', width: '100%', height: '100%', top: 0, left: 0, zIndex: -1, opacity: .8}}/>*/}
+        {/* <img src="http://localhost:7001/static/uploads/helloworld.jpg" alt="背景图" style={{position: 'fixed', width: '100%', height: '100%', top: 0, left: 0, zIndex: -1, opacity: .8}}/> */}
+      <div className="content">content</div>
       </Row>
     )
   }
@@ -182,16 +171,25 @@ class UserForm extends Component {
         <Form.Item>
           {
             getFieldDecorator('password', {
-              rules: [{required: true, message: 'please input your password'}],
+              rules: [{validator: this.checkUsername},{required: true, message: 'please input your password'}],
             })(<Input prefix={<Icon type="lock"/>} type="password" placeholder="password"/>)
           }
         </Form.Item>
+        {
+          !this.state.reginIf ? <Form.Item>
+          {
+            getFieldDecorator('honey', {
+              rules: [{validator: this.checkUsername},{required: true, message: '请输入昵称'}],
+            })(<Input prefix={<Icon type="solution"/>} type="text" placeholder="honey"/>)
+          }
+          </Form.Item> : null
+        }
         <Form.Item className="formLogin">
           <Button htmlType="submit" className="login-form-button">
             { this.state.reginIf ? '登录' : '注册' }
           </Button> 
           <span onClick={() => this.setState({reginIf: !this.state.reginIf})} className="forma">
-          {this.state.reginIf ? '已有账号,请登录' : '还未有账号请注册'}</span>
+          {!this.state.reginIf ? '已有账号,请登录' : '还未有账号请注册'}</span>
         </Form.Item>
       </Form>
     )

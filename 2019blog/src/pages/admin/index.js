@@ -7,7 +7,8 @@ import Article from '../article';
 import Classify from '../classify';
 import LeftMenu from '../../components/LeftMenu';
 import User from '../user';
-import Shouye from '../shouye';
+import Shouye from "../shouye";
+// import Shouye from '../shouye';
 import { withRouter } from 'react-router-dom';
 class Admin extends Component {
   render () {

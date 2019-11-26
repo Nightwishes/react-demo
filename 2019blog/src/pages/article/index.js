@@ -315,12 +315,6 @@ class Article extends Component {
           <Col span={16}
           style={{width:300}}
           >
-            <Input.Search
-              enterButton
-              onSearch={value => this.setState({
-                keyWord: value
-              }, this.getList(1, this.state.pagination.pageSize, this.state.keyWord))}
-            />
           </Col>
         </Row>
         <Row>
